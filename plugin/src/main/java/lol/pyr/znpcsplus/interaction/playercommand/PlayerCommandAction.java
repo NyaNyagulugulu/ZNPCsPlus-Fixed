@@ -24,7 +24,9 @@ public class PlayerCommandAction extends InteractionActionImpl {
     @Override
     public void run(Player player) {
         String cmd = command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString());
-        scheduler.schedulePlayerCommand(player, PapiUtil.set(player, cmd));
+        String processedCmd = PapiUtil.set(player, cmd);
+        // 确保命令以玩家身份执行
+        scheduler.schedulePlayerCommand(player, processedCmd);
     }
 
     @Override

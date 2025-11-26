@@ -1,49 +1,37 @@
-# ZNPCsPlus [![](https://img.shields.io/discord/1099449144948555957?label=Discord&logo=Discord&style=plastic)](https://discord.gg/MAZz6XpPcg) [![](https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fci.pyr.lol%2Fjob%2FZNPCsPlus%2F&style=plastic&logo=jenkins)](https://ci.pyr.lol/job/ZNPCsPlus/)
-[![](https://img.shields.io/bstats/players/18244?style=plastic&label=bStats%20Players)]((https://bstats.org/plugin/bukkit/ZNPCsPlus/18244/)) [![](https://img.shields.io/bstats/servers/18244?style=plastic&label=bStats%20Servers)]((https://bstats.org/plugin/bukkit/ZNPCsPlus/18244/)) [![](https://img.shields.io/spiget/downloads/109380?style=plastic&label=Spigot%20Downloads)]((https://www.spigotmc.org/resources/znpcsplus.109380/))
+# ZNPCsPlus-Fixed
+这是基于ZNPCsPlus的修复版本，已知原版问题
 
-[ZNPCsPlus](https://www.spigotmc.org/resources/znpcsplus.109380/) is a Spigot plugin that is used to create fake entities 
-that players can interact with to perform actions like switching servers on a network or executing commands.
+### 1. 指令中无法携带空格的问题
+在原版中，执行以下命令时：
+```
+/npcs action edit 排行榜助手 0 playercommand ANY_CLICK 1 0 pit leaderboard
+```
+命令 `pit leaderboard` 中的空格无法被正确识别。
 
-This plugin is a remake of a plugin called ZNPCs, we originally started because the maintainer of ZNPCs decided to announce that he was 
-[dropping support for the plugin](https://github.com/Pyrbu/ZNPCsPlus/blob/2.X/.github/znpc.png?raw=true).
+**修复方式：** 现在支持使用引号包含包含空格的命令：
+```
+/npcs action edit 排行榜助手 0 playercommand ANY_CLICK 1 0 "pit leaderboard"
+```
 
-Looking for up-to-date builds of the plugin? Check out our [Jenkins](https://ci.pyr.lol/job/ZNPCsPlus/)
+### 2. playercommand执行身份问题
+部分指令使用playercommand参数执行时无法使用玩家的身份执行。
 
-## Why is it so good?
-- 100% Packet Based - Nothing is ran on the main thread
-- Performance & stability oriented code
-- Support for all versions from 1.8 to 1.21.8
-- Support for multiple different storage options
-- Intuitive command system
+**修复方式：** 确保playercommand使用玩家身份执行指令，而不是模拟或使用控制台身份。
+```
+/npcs action edit <npc名称> <动作索引> playercommand <点击类型> <冷却时间> <延迟> <命令>
+```
 
-### Requirements, Extensions & Supported Software
-Requirements:
-- Java 8+
-- Minecraft 1.8 - 1.21.8
+## 使用示例
+```
+# 为NPC添加玩家命令动作，当玩家点击时执行pit leaderboard命令
+/npcs action edit 排行榜助手 0 playercommand ANY_CLICK 1 0 "pit leaderboard"
 
-Supported Softwares:
-- Spigot ([Website](https://www.spigotmc.org/))
-- Paper ([Github](https://github.com/PaperMC/Paper)) ([Website](https://papermc.io/software/paper))
-- Folia ([Github](https://github.com/PaperMC/Folia)) ([Website](https://papermc.io/software/folia))
-- ArcLight ([Github](https://github.com/IzzelAliz/Arclight))
+# 使用玩家身份执行tp命令
+/npcs action edit testnpc 0 playercommand LEFT_CLICK 0 0 "tp @p 0 100 0"
+```
 
-Optional Dependencies/Extensions:
-- PlaceholderAPI
-
-## Found a bug?
-Open an issue in the GitHub [issue tracker](https://github.com/Pyrbu/ZNPCsPlus/issues) or join our [support discord](https://discord.gg/MAZz6XpPcg)
-
-## BStats
-[![](https://bstats.org/signatures/bukkit/znpcsplus.svg)](https://bstats.org/plugin/bukkit/ZNPCsPlus/18244/)
-
-#### Like what you see? Want the project to continue improving? Consider starring the repository & leaving a positive review on [Spigot](https://www.spigotmc.org/resources/znpcsplus.109380/)!
-
-## Credits
-- [PacketEvents 2.0](https://github.com/retrooper/packetevents) - Packet library
-- [Minecraft Wiki Protocol (formally wiki.vg)](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Main_Page) - Minecraft protocol documentation
-- [gson](https://github.com/google/gson) - JSON parsing library made by Google
-- [Mineskin.org](https://mineskin.org/) - Website for raw skin file uploads
-- [adventure](https://docs.advntr.dev/) - Minecraft text api
-- [DazzleConf](https://github.com/A248/DazzleConf) - Configuration library
-- [Director](https://github.com/Pyrbu/Director) - Command library
-- [PlaceholderAPI](https://github.com/PlaceholderAPI/PlaceholderAPI) - Universal string placeholder library
+## 功能说明
+- playercommand: 以玩家身份执行命令
+- consolecommand: 以控制台身份执行命令
+- playerchat: 让玩家发送消息
+- message: 向玩家发送消息
