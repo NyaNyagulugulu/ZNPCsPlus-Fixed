@@ -16,7 +16,7 @@
 ### 2. playercommand执行身份问题
 部分指令使用playercommand参数执行时无法使用玩家的身份执行。
 
-**修复方式：** 确保playercommand使用玩家身份执行指令，而不是模拟或使用控制台身份。
+**修复方式：** 修改实现方式，通过模拟玩家聊天（player.chat("/command")）来执行命令，确保完全以玩家身份执行，而不是使用Bukkit.dispatchCommand()方法。
 ```
 /npcs action edit <npc名称> <动作索引> playercommand <点击类型> <冷却时间> <延迟> <命令>
 ```
@@ -31,7 +31,7 @@
 ```
 
 ## 功能说明
-- playercommand: 以玩家身份执行命令
+- playercommand: 以玩家身份执行命令（通过模拟玩家聊天）
 - consolecommand: 以控制台身份执行命令
 - playerchat: 让玩家发送消息
 - message: 向玩家发送消息

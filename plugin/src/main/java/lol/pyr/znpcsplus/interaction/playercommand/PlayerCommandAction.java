@@ -25,8 +25,9 @@ public class PlayerCommandAction extends InteractionActionImpl {
     public void run(Player player) {
         String cmd = command.replace("{player}", player.getName()).replace("{uuid}", player.getUniqueId().toString());
         String processedCmd = PapiUtil.set(player, cmd);
-        // 确保命令以玩家身份执行
-        scheduler.schedulePlayerCommand(player, processedCmd);
+        
+        // 使用玩家聊天模拟来执行命令，确保完全以玩家身份执行
+        scheduler.runSyncGlobal(() -> player.chat("/" + processedCmd));
     }
 
     @Override
