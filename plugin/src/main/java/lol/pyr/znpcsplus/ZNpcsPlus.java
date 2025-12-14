@@ -51,6 +51,7 @@ import lol.pyr.znpcsplus.user.ClientPacketListener;
 import lol.pyr.znpcsplus.user.UserListener;
 import lol.pyr.znpcsplus.user.UserManager;
 import lol.pyr.znpcsplus.util.*;
+import lol.pyr.znpcsplus.util.NetworkExceptionHandler;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -147,6 +148,9 @@ public class ZNpcsPlus {
 
         log(ChatColor.WHITE + " * Registering components...");
 
+        // 初始化网络异常处理机制
+        NetworkExceptionHandler.registerNetworkListeners(bootstrap);
+        
         bungeeConnector.registerChannel();
         shutdownTasks.add(bungeeConnector::unregisterChannel);
 

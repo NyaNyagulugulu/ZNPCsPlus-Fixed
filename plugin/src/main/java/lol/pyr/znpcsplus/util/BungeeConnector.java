@@ -15,7 +15,10 @@ public class BungeeConnector {
     }
 
     public void connectPlayer(Player player, String server) {
-        player.sendPluginMessage(plugin, CHANNEL_NAME, createMessage("Connect", server));
+        // 使用安全的网络操作来避免网络连接异常导致插件崩溃
+        NetworkExceptionHandler.safeNetworkOperation(plugin, () -> {
+            player.sendPluginMessage(plugin, CHANNEL_NAME, createMessage("Connect", server));
+        });
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -26,10 +29,14 @@ public class BungeeConnector {
     }
 
     public void registerChannel() {
-        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, CHANNEL_NAME);
+        NetworkExceptionHandler.safeNetworkOperation(plugin, () -> {
+            Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, CHANNEL_NAME);
+        });
     }
 
     public void unregisterChannel() {
-        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, CHANNEL_NAME);
+        NetworkExceptionHandler.safeNetworkOperation(plugin, () -> {
+            Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, CHANNEL_NAME);
+        });
     }
 }
